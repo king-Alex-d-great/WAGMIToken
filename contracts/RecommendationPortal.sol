@@ -5,10 +5,7 @@ pragma solidity ^0.8.0;
 import "hardhat/console.sol";
 
 contract RecommendationPortal {
-    constructor(){
-        console.log("yo yo oy, I don det create buildspace rpoject!");
-    }
-   
+       
    //should have an event!!
       uint totalAboutMes;
 
