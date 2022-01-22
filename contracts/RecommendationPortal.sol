@@ -6,8 +6,16 @@ import "hardhat/console.sol";
 
 contract RecommendationPortal {
        
-   //should have an event!!
+   event AboutMeAdded (address sender, string aboutMe );
       uint totalAboutMes;
+
+    struct Wave {
+        address sender;
+        string AboutMe;
+        uint TimeStamp;
+    }  
+
+    Wave[] waves;
 
    mapping (address => string) employeeToAboutme;
     //Am an employer, this is a contract where you send info about your self nd why i should employ u
@@ -23,12 +31,17 @@ contract RecommendationPortal {
     function _saveAboutMe (address sender, string memory aboutme) private {
         //require that the person has not sent stuff ever before!!
         employeeToAboutme[sender] = aboutme;
-        //emit an event! 
+        waves.push(Wave(sender, aboutme, block.timestamp));
+        emit AboutMeAdded(sender, aboutme);//emit an event! 
     }
 
     //I want to be able to get the number of about mes i have
     function getTotalAboutMes () public view returns (uint) {
         console.log("We have %d potential employees", totalAboutMes);
         return totalAboutMes;
+    }
+
+    function getAllAboutMes () public view returns (Wave[] memory) {
+        return waves;
     }
 }
