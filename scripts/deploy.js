@@ -2,20 +2,22 @@ const main = async () => {
     //get the address of the deployer
     const [deployer] = await hre.ethers.getSigners();
     //get balance
-    let balance = deployer.balance;
+    let balance = await deployer.getBalance();
     
-    console.log(`The deployer of this app : ${deployer}`);
+    console.log(`The deployer of this app : ${deployer.address}`);
     console.log(`deployer balance : ${balance}`);
     //get the contract
 
     var contractFactory = await hre.ethers.getContractFactory("RecommendationPortal");
     var contract = await contractFactory.deploy();
-    await contract.deployed();    
+    await contract.deployed();
+    
+    console.log("WavePortal address: ", contract.address);
 }
 
 const run = async () => {
     try {
-        main();
+        await main();
         process.exit(0);
     } catch (error) {
         console.log(error);

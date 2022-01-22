@@ -2,7 +2,7 @@ const main = async () => {
     const [owner, randomPerson] = await hre.ethers.getSigners();
     //compile our contact and create the files we need to work with our contract under the artifacts directory 
     const recommendationContractFactory = await hre.ethers.getContractFactory("RecommendationPortal");
-    //Here hardhat will create a local ethereum network fro us and deploy our contract
+    //Here hardhat will create a local ethereum network for us and deploy our contract
     //It will destroy the blockchain after the script finishes
     //and create a fresh blockchain for everytime we run the contract
     const recommendationContract = await recommendationContractFactory.deploy(); 
@@ -15,14 +15,22 @@ const main = async () => {
     let aboutMeCount = await recommendationContract.getTotalAboutMes();
 
     let aboutMeTxn = await recommendationContract.sendAboutMe("I write beautiful and secure contracts");
-    await aboutMeTxn.wait();
+    await aboutMeTxn.wait(); // Wait for the transaction to be mined
 
     aboutMeCount = await recommendationContract.getTotalAboutMes();
 
-    console.log("simulating a random oerson sending an about me\n")
+    console.log("simulating a random person sending an about me\n");
     aboutMeTxn = await recommendationContract.connect(randomPerson).sendAboutMe("I love to eat beans");
     aboutMeCount = await recommendationContract.getTotalAboutMes();
+    console.log("Get total about mes", aboutMeCount.toNumber());
 
+    console.log("simulating a second random person sending an about me Two\n");
+    aboutMeTxn = await recommendationContract.connect(randomPerson).sendAboutMe("I love my XPS");
+    aboutMeCount = await recommendationContract.getTotalAboutMes();
+    console.log("Get total about mes", aboutMeCount.toNumber());
+
+    let newTxn = await recommendationContract.getAllAboutMes();
+    console.log(newTxn);
 }
 
 const runMain = async () => {
