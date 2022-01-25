@@ -9,7 +9,7 @@ const main = async () => {
     //get the contract
 
     var contractFactory = await hre.ethers.getContractFactory("RecommendationPortal");
-    var contract = await contractFactory.deploy();
+    var contract = await contractFactory.deploy({value: hre.ethers.utils.parseEther("0.1")});
     await contract.deployed();
     
     console.log("WavePortal address: ", contract.address);
