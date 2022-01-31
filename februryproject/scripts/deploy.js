@@ -5,10 +5,10 @@ const main = async () => {
     const wagmiContractFactory = await hre.ethers.getContractFactory("WagmiTkn");
 
     const wagmiContract = await wagmiContractFactory.deploy();
-    await wagmiContract.deployed();
+    const wagmi = await wagmiContract.deployed();
 
     console.log(`Deployed by: ${deployer.address}`);
-    console.log(`Deployed to: ${wagmiContract.address}`);
+    console.log(`Deployed to: ${wagmi.address}`);
 }
 
 const run = async () => {   
