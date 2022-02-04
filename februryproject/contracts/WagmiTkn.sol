@@ -20,4 +20,8 @@ contract WagmiTkn {
     function balanceOf (address sender) external view returns (uint) {
         return balances[sender];
     }
+
+    function transferFrom(){
+        
+    }
 }
