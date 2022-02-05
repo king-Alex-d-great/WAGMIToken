@@ -21,7 +21,7 @@ contract WagmiTkn {
         return balances[sender];
     }
 
-    function transferFrom(){
-        
+    function transferFrom() external {
+
     }
 }
