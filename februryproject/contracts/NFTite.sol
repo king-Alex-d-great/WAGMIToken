@@ -8,6 +8,19 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 
 contract NFTite is ERC721URIStorage, Ownable {
-    using Counter for Counters.Counter;
+    using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
+
+    constructor () public ERC721("NFTite", "nftite") {}
+
+    function mintNft (address recipient, string memory tokenURI) public onlyOwner returns (uint){
+
+        _tokenIds.increment(); //imcrement tokenId
+        uint newItemId = _tokenIds.current();// store new Id in a variable
+        _mint(recipient, newItemId); //mint the token
+        _setTokenURI(newItemId, tokenURI);
+
+        return newItemId;
+    }
 }
+
