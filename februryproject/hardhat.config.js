@@ -21,10 +21,18 @@ module.exports = {
   paths: {
     artifacts: './src/artifacts',
   },
-  networks: {
-    rinkeby: {
-      url: "https://rinkeby.infura.io/v3/c5d34f30dfb847d2933181da76ff087e" ,
-    accounts: ["5d00cef7a5705a1db1262c2b3ab5afe7d6b39259d464c927ccf8a804009f5419"]
-     }
-    }
+  //WAGMI
+  // networks: {
+  //   rinkeby: {
+  //     url: "https://rinkeby.infura.io/v3/c5d34f30dfb847d2933181da76ff087e" ,
+  //   accounts: ["5d00cef7a5705a1db1262c2b3ab5afe7d6b39259d464c927ccf8a804009f5419"]
+  //    }
+  //   }
+
+    networks: {
+      rinkeby: {
+        url: "https://eth-rinkeby.alchemyapi.io/v2/16k_1ASgiyJh18bnYvV8sW6aADZ7TQMm" ,
+      accounts: ["1a4823d90bc72d354903a8b4ec71ec9c953393fcc87455e7b6145e3aefb9fdc2"]
+       }
+      }
 };
