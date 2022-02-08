@@ -12,13 +12,13 @@ const contractAddress = "0x6d9763d7CB4B642c898dd7B23fAa09609E953C56"
 const nftContract = new web3.eth.Contract(contract.abi, contractAddress);
 
 async function mintNFT (tokenURI) {
-    const nonce = await web3.eth.getTransactionCount(PUBLIC_kEY, 'latest');
+    const nonce = Number(web3.eth.getTransactionCount(PUBLIC_kEY, 'pending')) + 1;
 
 const tx = {
     from: PUBLIC_kEY,
-    to : contractAddress,
-    nonce: nonce,
+    to : contractAddress,    
     gas: 500000,
+    nonce: await nonce,
     data: nftContract.methods.mintNft(PUBLIC_kEY,tokenURI).encodeABI()
 }
 
@@ -37,8 +37,13 @@ signPromise.then((signedTx) => {
 });
 }
 
-//mintNFT("https://gateway.pinata.cloud/ipfs/QmcT8VmrFw9scDqZKYCGnz9kQ9CBYed3JfWFt1qDHRr66w");
+const multipleMint = async (totalTokensTobeMinted, tokenUri) => {    
+    for(let i = 1; i < totalTokensTobeMinted; i++){
+        await mintNFT(tokenUri);
+    }
+}
 
-mintNFT("https://gateway.pinata.cloud/ipfs/QmZqibZ65seiVERjSfDrzQw97KCnsoL2PZZMSSBz155oxh");
+multipleMint(10,"https://gateway.pinata.cloud/ipfs/QmcT8VmrFw9scDqZKYCGnz9kQ9CBYed3JfWFt1qDHRr66w" )
+// mintNFT();
 
-//mintNFT("https://gateway.pinata.cloud/ipfs/QmcT8VmrFw9scDqZKYCGnz9kQ9CBYed3JfWFt1qDHRr66w");
+// mintNFT("https://gateway.pinata.cloud/ipfs/QmZqibZ65seiVERjSfDrzQw97KCnsoL2PZZMSSBz155oxh");
