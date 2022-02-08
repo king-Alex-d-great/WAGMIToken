@@ -29,12 +29,16 @@ signPromise.then((signedTx) => {
         if (!err){
             console.log(`The hash of your transaction is ${hash},\n Check Alchemy mempool to view the status of your transaction!`);
         } else {
-            console.err("Something went wrong", err)
+            console.error("Something went wrong", err)
         }
     }).catch((err) => {
-        console.errror("promise failed", err)
+        console.error("promise failed", err)
     })
 });
-
 }
-mintNFT("https://gateway.pinata.cloud/ipfs/QmcT8VmrFw9scDqZKYCGnz9kQ9CBYed3JfWFt1qDHRr66w");
+
+//mintNFT("https://gateway.pinata.cloud/ipfs/QmcT8VmrFw9scDqZKYCGnz9kQ9CBYed3JfWFt1qDHRr66w");
+
+mintNFT("https://gateway.pinata.cloud/ipfs/QmZqibZ65seiVERjSfDrzQw97KCnsoL2PZZMSSBz155oxh");
+
+//mintNFT("https://gateway.pinata.cloud/ipfs/QmcT8VmrFw9scDqZKYCGnz9kQ9CBYed3JfWFt1qDHRr66w");
