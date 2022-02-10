@@ -6,8 +6,9 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
-contract NFTite is ERC721URIStorage, ERC721Enumerable, Ownable {
+contract NFTite is ERC721URIStorage, ERC721Enumerable, Ownable, ReentrancyGuard {
 
 //Using
 //events
@@ -24,9 +25,13 @@ contract NFTite is ERC721URIStorage, ERC721Enumerable, Ownable {
     event NftBought(address acquirer, uint tokenId);
     event NftGifted(address from, address to, uint tokenId);
 
-//Address, tokenId, time gotten
-    mapping(address => mapping(uint => uint)) 
-    
+    //Address, tokenId, time gotten/Given away
+    mapping(address => mapping(uint => uint)) private _tokenToTimeAcquired;
+    mapping(address => mapping(uint => uint)) private _tokenToTimeGivenAway;
+
+    //tokenId to amount available/minted
+    mapping(uint => uint) private tokenAvailable;    
+
     constructor () public ERC721("NFTite", "nftite") {}
     event MintSucces ( address sender);
 
@@ -53,6 +58,8 @@ contract NFTite is ERC721URIStorage, ERC721Enumerable, Ownable {
          emit NftGifted(from, to, tokenId);
     }
 
-    function SellNft ()
+    function SellNft (uint tokenId) external nonReentrant {
+
+    }
 
 }
