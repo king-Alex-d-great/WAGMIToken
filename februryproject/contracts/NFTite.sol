@@ -22,8 +22,10 @@ contract NFTite is ERC721URIStorage, ERC721Enumerable, Ownable, ReentrancyGuard 
 
     address payable private _contractWalletAddress;  
 
-    event NftBought(address acquirer, uint tokenId);
-    event NftGifted(address from, address to, uint tokenId);
+    event NftBought(address indexed acquirer, uint indexed tokenId);
+    event NftGifted(address indexed from, address indexed to, uint indexed tokenId);
+    event TryingToSellPrematureNFT(address indexed sender, uint indexed tokenId, uint indexed amount);
+    event MintSucces (address sender);
 
     //Address, tokenId, time gotten/Given away
     mapping(address => mapping(uint => uint)) private _tokenToTimeAcquired;
@@ -34,7 +36,7 @@ contract NFTite is ERC721URIStorage, ERC721Enumerable, Ownable, ReentrancyGuard 
     //store six months as a private field Six months = now (182.50000182500003 * 1days ) 
 
     constructor () public payable ERC721("NFTite", "nftite") {}
-    event MintSucces ( address sender);
+    
 
     function mintNft (address recipient, string memory tokenURI) public onlyOwner returns (uint){        
         _tokenIds.increment(); //increment tokenId
@@ -59,28 +61,37 @@ contract NFTite is ERC721URIStorage, ERC721Enumerable, Ownable, ReentrancyGuard 
          emit NftGifted(from, to, tokenId);
     }
 
+    function _getHoldTimeAndMaturityStatus(address _holder, uint _tokenId) private view returns (bool, uint) {
+       
+        //get the date it was purchased
+        //compare now and date
+        //return a bool
+       uint datePurchased = _tokenToTimeAcquired[_holder][_tokenId];
+       uint holdTime = now - datePurchased;
+       if (now - datePurchased > 183 days){
+           return (true, holdTime) 
+       }
+       return (false, holdTime;
+    }
+
     function SellNft (uint tokenId) external nonReentrant {
+        require(msg.sender == _owners[tokenId], "You do not have permission to sell this NFT!");
         //check that person doing this is the owner of the NFT
         tokenAvailable[tokenId] +=  1;
-        let timeOfHold = _calculateHoldTime();
+        
+        let (isUpToSixMonths, timeOfHold) = __getHoldTimeAndMaturityStatus();
         let cashoutAmount = _calculateCashoutAmount(timeOfhold,tokenId, addressi);
-        //emit event if the person time acquired is not up to six months
+          //emit event if the person time acquired is not up to six months
+        if(!isUpToSixMonths){
+           emit TryingToSellPrematureNFT(msg.sender, tokenId, cashoutAmount);
+        }
         _safeTransfer(msg.sender, _contractWalletAddress, tokenId);
         payable(msg.sender).transfer(cashoutAmount);
     }
 
     function GetAllHolders () external view {
         //Use a struct
-    }
-
-    function _calculateHoldTime(uint tokenId, address holder) private pure returns (uint, bool){
-    //get time acquired
-    //get time right now! 
-    //timeheld = time right now - time acquired = result 
-    //convert timeheld to months
-    //use either bool or uint as an indicator to check whether this person has been holding for up to six months or less, Store this result in a variable
-    //return timeOfHold and then indicator if it is less than 6 months
-    }
+    }   
 
     function _calculateCashoutAmount (uint initialInvestment) private pure returns (uint) {
         //get initial amount of token
@@ -96,8 +107,15 @@ contract NFTite is ERC721URIStorage, ERC721Enumerable, Ownable, ReentrancyGuard 
     }
 
     function withdraw() external onlyOwner reentrant {
+    }
 
+     function withdrawMoney() public onlyOwner {
+        address payable to = payable(msg.sender);
+        to.transfer(getBalance());
+    }
 
+    function withdrawMoneyTo(address payable _to) public onlyOwner {
+        _to.transfer(getBalance());
     }
 
 }
