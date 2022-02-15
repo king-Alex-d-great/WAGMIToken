@@ -106,15 +106,17 @@ contract NFTite is ERC721URIStorage, ERC721Enumerable, Ownable, ReentrancyGuard 
        //182.50000182500003 (6 months) half of 365 days.
     }
 
-    function withdraw() external onlyOwner reentrant {
+
+    function getBalance() external view returns(uint) {
+        return address(this).balance;
     }
 
-     function withdrawMoney() public onlyOwner {
+     function withdrawMoney() external onlyOwner reentrant {
         address payable to = payable(msg.sender);
         to.transfer(getBalance());
     }
 
-    function withdrawMoneyTo(address payable _to) public onlyOwner {
+    function withdrawMoneyTo(address payable _to) external onlyOwner reentrant {
         _to.transfer(getBalance());
     }
 
